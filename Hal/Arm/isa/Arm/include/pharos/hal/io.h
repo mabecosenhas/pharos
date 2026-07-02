@@ -1,0 +1,140 @@
+/****************************************************************************
+ * Pharos - A Real-Time Secure Operating System                             *
+ * Copyright 2020 Pedro Macara and Filipe Monteiro                          *
+ *                                                                          *
+ * Licensed under the Apache License, Version 2.0 (the "License");          *
+ * you may not use this file except in compliance with the License.         *
+ * You may obtain a copy of the License at                                  *
+ *                                                                          *
+ *     http://www.apache.org/licenses/LICENSE-2.0                           *
+ *                                                                          *
+ * Unless required by applicable law or agreed to in writing, software      *
+ * distributed under the License is distributed on an "AS IS" BASIS,        *
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. *
+ * See the License for the specific language governing permissions and      *
+ * limitations under the License.                                           *
+ *                                                                          *
+ ****************************************************************************/
+
+
+#ifndef PHAROS_ARM_IO_H
+#define	PHAROS_ARM_IO_H
+
+#ifdef	__cplusplus
+extern "C"
+{
+#endif
+
+#include <pharos/hal/hal.h>
+#include <pharos/hal/declarations.h>
+
+    /**
+     * Compact the size
+     */
+#pragma pack(push ,4)   
+
+
+    struct IpCallPreamble
+    {
+        /* move the r1 to r0 (input) */
+        uint32_t mov_r0_r1;
+        
+        /* move the r2 to r1 (output) */
+        uint32_t mov_r1_r2;
+        
+        /* r2 has the call number to execute */
+        uint32_t mov_r2_pc_plus;
+
+        /* r3 will have the partition number */
+        uint32_t mov_r3_pc_plus;
+
+        /* save r0 */
+        uint32_t push_r0;
+
+        /* read the CPSR to r0 */
+        uint32_t mrs_r0_cpsr;
+
+        /* clear everything except the mode bits */
+        uint32_t and_r0_r0_01f;
+
+        /* check if the mode is user mode */
+        uint32_t cmp_r0_user_mode;
+
+        /* restore r0 */
+        uint32_t pop_r0;
+
+        /* if it is then jump to call the swi */
+        uint32_t beq_user_mode;
+
+        /* jump to the pharosSIpCall address (last field on this struct) */
+        uint32_t ldr_pc_pc_plus;
+
+        /* save r0 the syscall (r2 will contain the number to execute but we don't need to save it (r0-r3 are assumed to be lost by the caller) */
+        uint32_t push_r0_r4_r12_lr;
+
+        /* invoke the syscall */
+        uint32_t swi_OS_CUSTOM_SYSCALL;
+
+        /* restore sp to its original place */
+        uint32_t pop_r2_r4_2_r12_lr;
+
+        /* leave the function */
+        uint32_t bx_lr;
+
+        /* place where the call number is specified */
+        uint32_t call_number;
+
+        /* place where the partition number is specified */
+        uint32_t partition_number;
+
+        /* address of pharosSIpCall function */
+        uint32_t pharosSIpCallAddress;
+    };
+
+
+    /**
+     * Self-modifying code in the Kernel area that executes a direct I/O access.
+     * 
+     * When this code is executed, the CPU is in USER mode but the TLB has access to every address.
+     * We use the syscall to return to user TLB because doing this here has plenty of restrictions regarding
+     * changing the TLB, waiting until the TLB has been changed and switching to user mode (must make sure the TLB has been changed to allow interrupts)
+     * but once the TLB has been changed we cannot execute any more instructions inside this memory area since this memory area is inside the kernel.
+     */
+    struct ThreadIoMemAccess
+    {
+        /* at this point all registers are equal, the TLB = kernel and the CPU mode is SYSTEM */
+
+        /* issue the original instruction */
+        uint32_t originalInstruction;
+
+        /* save r0 to stack */
+        uint32_t push1_r0;
+
+        /* ldr r0 , [pc , 4] */
+        uint32_t ldr_r0_returnAddress;
+
+        /* push r0 again to stack (to be used by the syscall) */
+        uint32_t push2_r0;
+
+        /* use syscall to return to user mode and uses the following address as the lr once the syscall ends */
+        uint32_t swi_return_direct_io;
+
+        /* return address once this piece of code is executed */
+        uint32_t returnAddress;
+    };
+
+#pragma pack(pop)
+    
+    /**
+     * Initializes the IO memory access
+     * 
+     * @param ioAccess io access to initialize
+     */
+    void pharosArmIoAccessInitialize(ptrThreadIoMemAccess ioAccess);
+
+
+#ifdef	__cplusplus
+}
+#endif
+
+#endif	/* IO_H */

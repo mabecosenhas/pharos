@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <logicalFolder name="f1" displayName="hal" projectFiles="true">
+        <logicalFolder name="f1" displayName="cpu" projectFiles="true">
+          <itemPath>include/pharos/hal/cpu/asm.h</itemPath>
+          <itemPath>include/pharos/hal/cpu/cache.h</itemPath>
+        </logicalFolder>
+        <logicalFolder name="f2" displayName="v8a" projectFiles="true">
+          <itemPath>include/pharos/hal/v8a/conf.h</itemPath>
+          <itemPath>include/pharos/hal/v8a/context.h</itemPath>
+          <itemPath>include/pharos/hal/v8a/declarations.h</itemPath>
+          <itemPath>include/pharos/hal/interrupt.h</itemPath>
+        </logicalFolder>
+      </logicalFolder>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>src/cache.c</itemPath>
+      <itemPath>src/cacheLow.S</itemPath>
+      <itemPath>src/channel.S</itemPath>
+      <itemPath>src/context.S</itemPath>
+      <itemPath>src/criticalSection.S</itemPath>
+      <itemPath>src/hwqueue.S</itemPath>
+      <itemPath>src/interrupt.c</itemPath>
+      <itemPath>src/interruptHandler.S</itemPath>
+      <itemPath>src/interrupts.S</itemPath>
+      <itemPath>src/interruptstack.c</itemPath>
+      <itemPath>src/ipcall.S</itemPath>
+      <itemPath>src/resource.S</itemPath>
+      <itemPath>src/restart.c</itemPath>
+      <itemPath>src/stack.S</itemPath>
+      <itemPath>src/start.S</itemPath>
+      <itemPath>src/startup.c</itemPath>
+      <itemPath>src/syscallHandler.S</itemPath>
+      <itemPath>src/syscalls.S</itemPath>
+      <itemPath>src/systemError.S</itemPath>
+      <itemPath>src/thread.c</itemPath>
+      <itemPath>src/userMode.S</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="arm-v8a-a53-rasp3-qemu-debug" type="3">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <commandlineTool>$$PHAROS_ARM_AARCH64_CC</commandlineTool>
+          <incDir>
+            <pElem>include</pElem>
+            <pElem>../../../../../Kernel/common/include</pElem>
+            <pElem>../../../board/raspberry/raspberry3/include</pElem>
+            <pElem>../MmuV8/include</pElem>
+            <pElem>../../../processor/Cortex-A/A53/BCM2837/include</pElem>
+            <pElem>../../../isa/A64/include</pElem>
+            <pElem>../MmuV8/include</pElem>
+            <pElem>../../../../../Kernel/rmp/include</pElem>
+            <pElem>../../../../memory/MemoryAreaSingle/include</pElem>
+          </incDir>
+          <commandLine>-O0 -g -mcpu=cortex-a53 -ffunction-sections -fdata-sections -Wall -Wextra -Wno-unused-parameter -Wno-unused-function</commandLine>
+          <warningLevel>3</warningLevel>
+        </cTool>
+        <asmTool>
+          <commandlineTool>$$PHAROS_ARM_AARCH64_CC</commandlineTool>
+          <commandLine>-c -g -mcpu=cortex-a53 -Iinclude -I../../../../../Kernel/common/include -I../../../processor/Cortex-A/A53/BCM2837/include</commandLine>
+        </asmTool>
+        <archiverTool>
+          <commandlineTool>$$PHAROS_ARM_AARCH64_ARCHIVER</commandlineTool>
+          <ranlibTool>$$PHAROS_ARM_AARCH64_RANLIB</ranlibTool>
+        </archiverTool>
+      </compileType>
+      <item path="include/pharos/hal/cpu/asm.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/pharos/hal/cpu/cache.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/pharos/hal/interrupt.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/pharos/hal/v8a/conf.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/pharos/hal/v8a/context.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/pharos/hal/v8a/declarations.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/cache.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/cacheLow.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/channel.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/context.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/criticalSection.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/hwqueue.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/interrupt.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/interruptHandler.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/interrupts.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/interruptstack.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/ipcall.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/resource.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/restart.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/stack.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/start.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/startup.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/syscallHandler.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/syscalls.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/systemError.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/thread.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/userMode.S" ex="false" tool="4" flavor2="0">
+      </item>
+    </conf>
+    <conf name="arm-v8a-a53-rasp3-qemu-release" type="3">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <commandlineTool>$$PHAROS_ARM_AARCH64_CC</commandlineTool>
+          <incDir>
+            <pElem>include</pElem>
+            <pElem>../../../../../Kernel/common/include</pElem>
+            <pElem>../../../board/raspberry/raspberry3/include</pElem>
+            <pElem>../MmuV8/include</pElem>
+            <pElem>../../../processor/Cortex-A/A53/BCM2837/include</pElem>
+            <pElem>../../../isa/A64/include</pElem>
+            <pElem>../MmuV8/include</pElem>
+            <pElem>../../../../../Kernel/rmp/include</pElem>
+            <pElem>../../../../memory/MemoryAreaSingle/include</pElem>
+          </incDir>
+          <commandLine>-O2 -g -mcpu=cortex-a53 -ffunction-sections -fdata-sections -Wall -Wextra -Wno-unused-parameter -Wno-unused-function</commandLine>
+          <warningLevel>3</warningLevel>
+        </cTool>
+        <asmTool>
+          <commandlineTool>$$PHAROS_ARM_AARCH64_CC</commandlineTool>
+          <commandLine>-c -g -mcpu=cortex-a53 -Iinclude -I../../../../../Kernel/common/include -I../../../processor/Cortex-A/A53/BCM2837/include</commandLine>
+        </asmTool>
+        <archiverTool>
+          <commandlineTool>$$PHAROS_ARM_AARCH64_ARCHIVER</commandlineTool>
+          <ranlibTool>$$PHAROS_ARM_AARCH64_RANLIB</ranlibTool>
+        </archiverTool>
+      </compileType>
+      <item path="include/pharos/hal/cpu/asm.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/pharos/hal/cpu/cache.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/pharos/hal/interrupt.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/pharos/hal/v8a/conf.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/pharos/hal/v8a/context.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/pharos/hal/v8a/declarations.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/cache.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/cacheLow.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/channel.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/context.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/criticalSection.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/hwqueue.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/interrupt.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/interruptHandler.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/interrupts.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/interruptstack.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/ipcall.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/resource.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/restart.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/stack.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/start.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/startup.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/syscallHandler.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/syscalls.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/systemError.S" ex="false" tool="4" flavor2="0">
+      </item>
+      <item path="src/thread.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/userMode.S" ex="false" tool="4" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>

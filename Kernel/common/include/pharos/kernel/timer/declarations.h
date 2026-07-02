@@ -1,0 +1,40 @@
+/****************************************************************************
+ * Pharos - A Real-Time Secure Operating System                             *
+ * Copyright 2020 Pedro Macara and Filipe Monteiro                          *
+ *                                                                          *
+ * Licensed under the Apache License, Version 2.0 (the "License");          *
+ * you may not use this file except in compliance with the License.         *
+ * You may obtain a copy of the License at                                  *
+ *                                                                          *
+ *     http://www.apache.org/licenses/LICENSE-2.0                           *
+ *                                                                          *
+ * Unless required by applicable law or agreed to in writing, software      *
+ * distributed under the License is distributed on an "AS IS" BASIS,        *
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. *
+ * See the License for the specific language governing permissions and      *
+ * limitations under the License.                                           *
+ *                                                                          *
+ ****************************************************************************/
+
+
+#ifndef PHAROS_TIMER_DECLARATIONS_H
+#define PHAROS_TIMER_DECLARATIONS_H
+
+
+#include <pharos/hal/hal.h>
+
+typedef struct Timer Timer , *ptrTimer;
+
+typedef struct TimerTable TimerTable , *ptrTimerTable;
+
+/**
+ * Timer number are actually 15 bit length
+ */
+typedef uint32_t TimerNumber , *ptrTimerNumber;
+
+typedef struct TimerId TimerId , *ptrTimerId;
+
+typedef void (*TimerHandler)(void *partitionData , uint64_t argument);
+
+
+#endif /* DECLARATIONS_H */

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>src/vicPl192.c</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="arm-v7-r5-tms570lc4357-LAUNCHXL2_570LC43-debug" type="3">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <commandlineTool>armeb-eabi-gcc</commandlineTool>
+          <incDir>
+            <pElem>include</pElem>
+            <pElem>../../../../../../Kernel/include</pElem>
+            <pElem>../../../../board/TI/LaunchXL2-570LC43/include</pElem>
+            <pElem>../../../../support/include</pElem>
+            <pElem>../../../Cortex-R/R5/tms570lc4357/include</pElem>
+            <pElem>../../../../../memory/Mpu/include</pElem>
+            <pElem>../../../../isa/Arm/include</pElem>
+            <pElem>../../../Cortex-R/R5/shared/include</pElem>
+            <pElem>../../../../memory/Mpu/include</pElem>
+          </incDir>
+          <commandLine>-g -O0 -mcpu=cortex-r5 -mfpu=vfpv3-d16 -mbig-endian</commandLine>
+        </cTool>
+        <asmTool>
+          <commandlineTool>armeb-eabi-gcc</commandlineTool>
+          <commandLine>-mcpu=cortex-r5 -mfpu=vfpv3-d16 -mbig-endian -Iinclude -I../../../../../../Kernel/include -I../../../../isa/Arm/include</commandLine>
+        </asmTool>
+        <archiverTool>
+          <commandlineTool>armeb-eabi-ar</commandlineTool>
+          <ranlibTool>armeb-eabi-ranlib</ranlibTool>
+        </archiverTool>
+      </compileType>
+      <item path="src/vicPl192.c" ex="false" tool="0" flavor2="0">
+      </item>
+    </conf>
+    <conf name="arm-v7-r5-tms570lc4357-LAUNCHXL2_570LC43-release" type="3">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+          <commandlineTool>armeb-eabi-gcc</commandlineTool>
+          <commandLine>-g -O2 -mcpu=cortex-r5 -mfpu=vfpv3-d16 -mbig-endian</commandLine>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+          <commandlineTool>armeb-eabi-gcc</commandlineTool>
+          <commandLine>-mcpu=cortex-r5 -mfpu=vfpv3-d16 -mbig-endian -Iinclude -I../../../../../../Kernel/include -I../../../../isa/Arm/include</commandLine>
+        </asmTool>
+        <archiverTool>
+          <commandlineTool>armeb-eabi-ar</commandlineTool>
+          <ranlibTool>armeb-eabi-ranlib</ranlibTool>
+        </archiverTool>
+      </compileType>
+      <item path="src/vicPl192.c" ex="false" tool="0" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
