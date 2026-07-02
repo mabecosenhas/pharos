@@ -1,0 +1,283 @@
+Welcome to Pharos
+
+########################################################################
+# Introduction
+########################################################################
+
+Pharos is an operating system designed for real-time systems. Its primary 
+objectives are:
+
+•	Security: Developed with security in mind. Implemented the notion 
+of partitions, similar to the ARINC653, with space partition and with 
+some additional enhancements in the time partitioning. Besides protecting
+each partition with the hardware Memory Management Unit, to avoid invalid
+ memory accesses, partitions in Pharos operate in user mode, which 
+renders impossible any attempt to control the CPU.
+
+•	Certifiably: Developed with the intention to reduce the future 
+certification burden of the system where Pharos will be used. Considering
+some of the requirements of the strictest standards (e.g DO178), like the
+Cyclomatic Number, Nesting Levels, Comments and MISRA rules. Pharos is 
+composed approximately of 10K lines of code.
+
+•	Mixed Criticality: Applications with different criticality levels
+(Level A, B, C, D, etc) can coexist in the same processor. Pharos 
+guarantees the independence and the isolation of each partition by 
+providing native support to sporadic, periodic and aperiodic threads 
+under a fixed-priority preemptive scheduler and includes WCET protection 
+(a thread is not allowed to execute for more time than it should). That 
+means that a non-critical partition can have a high priority thread and 
+Pharos will still fully ensure that lower priority threads will still 
+run, even if the non-critical thread is on an infinite loop. Pharos also 
+provides elegant and fast inter-partition communication and 
+synchronization solutions. Each partition can define filter functions 
+which state who is allowed to communicate with it. The improvements on 
+this topic are so extensive that is hard to summarize them. We encourage 
+you to read the User Manual for more information.
+
+•	Determinism: Pharos provides hard real-time determinism. Each 
+Pharos call will take a limited amount of time to execute and is, in a 
+few cases, maximized to O(Log(N)) of the number of objects in the system 
+(for example, number of threads).
+
+Pharos is open source and available in Sourceforge 
+(https://sourceforge.net/projects/rtospharos/). It is licensed under the 
+Apache License 2.0, meaning that you can use on your commercial or 
+non-commercial projects.
+
+The current supported platforms are:
+
+•	ARM926EJ-S CPU -> Versatilepb board with an  for a QEMU emulator 
+•	Cortex-R5  CPU -> LAUNCHXL2-570LC43 board with a Texas Instruments CPU (TMS570LC4357)
+          Note: this board is not currently supported since our own board is broken (flash)
+•	Cortex-M4  CPU -> EK_TM4C129EXL board with a Texas Instruments CPU (TM4C129ENCPDT)
+•	Cortex-M4  CPU -> STM32F469I-DISCOVERY board with an ST CPU (STM32F469NIH6)
+•	Cortex-A53 CPU -> Raspberry Pi3 in Aarch64 (qemu version only)
+•	RISC-V CPU     -> Quad-core RISC-V 64 bits Qemu Virt board (qemu version only)
+
+########################################################################
+# Documentation
+########################################################################
+
+For a complete user manual, go to 
+
+https://sourceforge.net/projects/rtospharos/files/
+
+select the Pharos release you want and download the UserManualx.x.x.tar.gz.
+In this user manual you will find a document with the full description of
+Pharos and source code of fully functioning examples.
+
+########################################################################
+# Hello World
+########################################################################
+
+To get your first application running on Pharos, please go to 
+
+https://sourceforge.net/p/rtospharos/wiki/Hello%20world/
+
+or check the examples in the user manual (see "Documentation" above).
+
+You can easily place some examples working on qemu for the versatilepb
+board.
+
+########################################################################
+# Installation
+########################################################################
+
+For detailed information about the installation procedure please refer to
+the Pharos User Manual.
+
+/*
+ * 1-Host
+ */
+
+For host machine please install a Linux based operating system (e.g 
+Debian like OS in 64 bits).
+
+Please install the following packages:
+
+# Package containing an informational list of packages which are 
+# considered essential for building Debian packages, including GCC, 
+# necessary for building the cross-compiler.
+apt-get install build-essential 
+
+# (Optional) C library in i386 platform in case you have installed the 
+# amd64 architecture. This libc:i386 will be used by Texas Instruments 
+# applications for running the boards.
+dpkg --add-architecture i386
+apt-get update
+apt-get install libc6:i386
+
+# Packages necessary to install the cross-compilers and the Qemu for 
+# all platforms
+apt-get install texinfo zlib1g-dev libglib2.0-dev libpixman-1-dev \
+flex bison
+
+/*
+ * 2-Extract Pharos and User Manual
+ */
+
+export PHAROS_FILE_PATH=~/Pharos
+
+mkdir $PHAROS_FILE_PATH
+
+cp pharos[X.Y.Z].tar.gz $PHAROS_FILE_PATH
+
+cp UserManual[X.Y.Z].tar.gz $PHAROS_FILE_PATH
+
+cd $PHAROS_FILE_PATH
+
+tar xvfz pharos[X.Y.Z].tar.gz
+
+tar xvfz UserManual[X.Y.Z].tar.gz
+
+/*
+ * 3-Toolchain
+ */            
+cd $PHAROS_FILE_PATH
+make -f Makefile.cross-compiler build-crosscompiler-all
+
+
+/*
+ * 5-Build qemu (optional) 
+ */
+make -f Makefile.cross-compiler qemu
+
+/*
+ * 6-Export the cross-compiler variables
+ */
+source export.sh
+
+
+/*
+ * 4-Build Pharos and Examples 
+ */
+cd $PHAROS_FILE_PATH/examples/thread/example1
+
+make CONF=arm-v5-926ejs-versatilepb-qemu-debug
+
+/*
+ * 5-Execute an example with QEMU
+ */
+qemu-system-arm -M versatilepb -m 128M -nographic -kernel \
+dist/arm-v5-926ejs-versatilepb-qemu-debug/GNU-Linux/application.bin
+
+/*
+ * 6-Further steps and information 
+ */
+
+For detailed infrmation about the installation procedure please refer to
+the Pharos User Manual.
+
+########################################################################
+# Datasheet
+########################################################################
+
+It was designed for Secure systems. This means that it supports real-time applications:
+
+•	Fixed-priority preemptive scheduler
+•	Quick critical sections (small amount of time where interrupts are disabled)
+•	Semaphore with ceiling protocol
+•	Priority queues -> the highest priority thread blocked on an object (e.g. semaphore) will be the first one to get it)
+•	Native support for periodic threads (real-time threads)
+•	Native support for sporadic threads (real-time threads)
+•	Native support for aperiodic threads (non real-time threads)
+•	Deadline monitoring
+•	Thread execution time monitoring - WCET - (and prevent the thread from executing more time than it is configured to)
+•	Low interrupt latency (time interval from the moment the interrupt is triggered in hardware and the instant the application ISR is invoked)
+•	Low context switch time
+•	Low flash requirements (~90 KiB for the full Pharos in flash)
+•	Low RAM requirements (~80 KiB of RAM required for Cortex-R5)
+•	and more
+
+The application can be divided into partitions, where each partition is 
+composed by a set of objects (threads, semaphores, queues, etc), and most 
+importantly, each partition cannot damage the execution of another 
+partition. This damage prevention is done both at:
+
+•	Memory Level Partition: a thread from one partition cannot access 
+the memory area of another partition
+
+•	Time Level Partition: each thread cannot execute for more time than it is allowed to
+
+Each thread is executed in user mode and therefore prevented perform "special" hardware 
+operations like changing the memory management (MMU/MPU) settings.
+
+Drivers in Pharos are executed as normal partitions. However, since drivers 
+have low-level hardware requirements that cannot always be meet in user 
+mode, Pharos features some special mechanisms so that drivers can be 
+executed (WITHOUT switching to supervisor mode). These are:
+
+•	Critical sections: a partition can be configured to have a function 
+that can be executed while interrupts are disabled (note that the function 
+is executed in user mode)
+
+•	Interrupt management:
+	• Your application can configure the priority (and whatever parameters
+          the CPU supports, such as "wake on interrupt") of each interrupt
+	• a partition can be configured to be able to install a pre-configured ISR handler
+
+•	I/O memory access: a partition can be configured to have access to 
+specific memory addresses (can be normal RAM memory or a device configuration registers)
+
+
+Besides the "standard" objects that Pharos provides for 
+communication/synchronization inside a partition (such as queues, events, 
+semaphores, etc), Pharos also provides inter-partition communication and 
+synchronization features:
+
+•	Resource: a synchronization mechanism that uses a semaphore ceiling 
+that allows the execution of a partition configured function in mutual 
+exclusion. To prevent a thread from having a WCET timeout inside the 
+execution of the function, a check is made before the call is made to verify 
+that the thread has enough execution time
+
+•	Heavy weight queue: copy messages from one partition to another. 
+Good for small messages
+
+•	Channel: "move" messages from one partition to another without copying 
+it. This is done through careful manipulation of the MMU/MPU. Good for big 
+messages, but incurs in a memory performance penalization since the messages 
+must be aligned and have a size that fits the requirements of the MMU (for 
+example, alignment to 4KiB and size multiple of 4KiB) or the MPU (for example, 
+in ARM, the MPU PMSR requires the alignment to be at least equal to the size 
+of the message)
+
+•	Inter-partition calls: Pharos allows each partition to define a set 
+of functions that can be accessed by other partitions. Furthermore, instead 
+of having the fixed format of the typical drivers calls (e.g. open, read, 
+write, control) which a fixed set of inputs and outputs, which will force to 
+the use of casts (e.g. "(struct termios *)"), Pharos allows the partition to 
+create its own function with any set of parameters (with few limitations)
+
+•	I/O memory access: a partition can be configured to have access to 
+specific memory addresses. This can be used for drivers but also for inter-partition 
+communication through a shared memory area
+
+•	Shared memory: There is a memory region that any partition can have 
+access to
+
+Since partitions can contain errors and call the inter-partition objects of 
+another partition can possibly damage it, Pharos introduces the concept of 
+"filters". A filter is a function, configured by the application for each 
+inter-partition object, invoked before the inter-partition object is accessed,
+that can allow or deny access to that object. This allows the re-usage of 
+generic partitions that implement, for example, drivers (e.g. CAN driver, 
+SPI driver) and the application that uses these generic partitions can define, 
+through the use of filters, which partitions can use these generic partitions
+and when. Note also that filters functions are executed within a special stack
+and on the context of the partition trying to be accessed. This is to ensure 
+that the calling partition does not have permissions to perform any kind of
+"attack" and gain permissions to the filter. Also, this filter function is 
+executed within the time execution of the calling thread. So if the same thread
+tries to gain access to a object by accessing it 1000s of times, it will only
+exaust its on execution time.
+
+########################################################################
+# Thanks
+########################################################################
+
+Thank you for using Pharos. Please feel free to contact us through the 
+email rtos.pharos@outlook.com and following the upgrades through the
+https://sourceforge.net/projects/rtospharos/.
+
