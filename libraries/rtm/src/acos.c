@@ -95,13 +95,23 @@ PHAROS_WEAK float64_t rtmAcosf64(float64_t x)
     /* value of the calculated result */
     float64_t result;
 
-    float64_t z , p , q , r , w , s , c , df;
+    float64_t z;
+    float64_t p;
+    float64_t q;
+    float64_t r;
+    float64_t w;
+    float64_t s;
+    float64_t c;
+    float64_t df;
 
     /* high word of x */
     int32_t hx;
 
     /* high word of |x| */
     int32_t ix;
+
+    /* low word of x for bit manipulation */
+    int32_t lx;
 
 
     /* high word of x */
@@ -110,35 +120,38 @@ PHAROS_WEAK float64_t rtmAcosf64(float64_t x)
     /* high word of |x| */
     ix = hx & RTM_FLOAT64_HI_UNMASK_SIGN;
 
+    /* low word of x */
+    lx = rtmGetLowf64(x);
+
     /* if |x| >= 1 */
-    if(ix >= RTM_FLOAT64_HI_ONE)
+    if (ix >= RTM_FLOAT64_HI_ONE)
     {
         /* if |x| == 1 */
-        if(((ix - RTM_FLOAT64_HI_ONE) | rtmGetLowf64(x)) == 0)
+        if (((ix - RTM_FLOAT64_HI_ONE) | lx) == 0)
         {
             /* if calculating acos(1) */
-            if(hx > 0)
+            if (hx > 0)
             {
                 result = 0.0;
             }
-                /* else, we are in acos(-1) */
             else
             {
                 /* acos(-1) = pi */
-                result = RTM_CONSTANT_PI + 2.0 * RTM_CONSTANT_PI_DIV_2_LOW;
+                result = RTM_CONSTANT_PI + (2.0 * RTM_CONSTANT_PI_DIV_2_LOW);
             }
         }
         else
         {
-            /* acos(|x|>1) is NaN */
-            result = (x - x) / (x - x);
+            /* acos(|x|>1) is NaN - result will be NaN */
+            result = 0.0;
+            result = result / result;
         }
     }
-        /* if |x| < 0.5 */
-    else if(ix < 0x3fe00000)
+    /* if |x| < 0.5 */
+    else if (ix < 0x3fe00000)
     {
         /* if |x| < 2^-57 */
-        if(ix <= 0x3c600000)
+        if (ix <= 0x3c600000)
         {
             /* return PI / 2 */
             result = RTM_CONSTANT_PI_DIV_2_HI + RTM_CONSTANT_PI_DIV_2_LOW;
@@ -148,34 +161,34 @@ PHAROS_WEAK float64_t rtmAcosf64(float64_t x)
             /* calculate through pi/2 - (x + x*x^2*R(x^2)) */
 
             /* calculate x^2 */
-            z = x*x;
+            z = x * x;
 
-            p = z * (pS0 + z * (pS1 + z * (pS2 + z * (pS3 + z * (pS4 + z * pS5)))));
-            q = RTM_CONSTANT_ONE + z * (qS1 + z * (qS2 + z * (qS3 + z * qS4)));
+            p = z * (pS0 + (z * (pS1 + (z * (pS2 + (z * (pS3 + (z * (pS4 + (z * pS5))))))))));
+            q = RTM_CONSTANT_ONE + (z * (qS1 + (z * (qS2 + (z * (qS3 + (z * qS4)))))));
 
             r = p / q;
 
-            result = RTM_CONSTANT_PI_DIV_2_HI - (x - (RTM_CONSTANT_PI_DIV_2_LOW - x * r));
+            result = RTM_CONSTANT_PI_DIV_2_HI - (x - (RTM_CONSTANT_PI_DIV_2_LOW - (x * r)));
         }
     }
-        /* if -1 < x <= -0.5 */
-    else if(hx < 0)
+    /* if -1 < x <= -0.5 */
+    else if (hx < 0)
     {
         /* calculate z = (1 + x) / 2 and since x is negative, this is equal to z = (1-|x|)/2 */
         z = (RTM_CONSTANT_ONE + x) * RTM_CONSTANT_HALF;
 
-        p = z * (pS0 + z * (pS1 + z * (pS2 + z * (pS3 + z * (pS4 + z * pS5)))));
-        q = RTM_CONSTANT_ONE + z * (qS1 + z * (qS2 + z * (qS3 + z * qS4)));
+        p = z * (pS0 + (z * (pS1 + (z * (pS2 + (z * (pS3 + (z * (pS4 + (z * pS5))))))))));
+        q = RTM_CONSTANT_ONE + (z * (qS1 + (z * (qS2 + (z * (qS3 + (z * qS4)))))));
 
         /* calculate s = sqrt( (1-|x|)/2 ) */
         s = rtmSqrtf64(z);
         r = p / q;
-        w = r * s - RTM_CONSTANT_PI_DIV_2_LOW;
+        w = (r * s) - RTM_CONSTANT_PI_DIV_2_LOW;
 
         /* return pi - 2asin(sqrt((1-|x|)/2)) */
-        result = RTM_CONSTANT_PI - 2.0 * (s + w);
+        result = RTM_CONSTANT_PI - (2.0 * (s + w));
     }
-        /* else, then 1 > x >= 0.5 */
+    /* else, then 1 > x >= 0.5 */
     else
     {
         /* assign z = (1-x) / 2 */
@@ -188,15 +201,15 @@ PHAROS_WEAK float64_t rtmAcosf64(float64_t x)
         df = s;
 
         /* reset the lower fractional bits */
-        rtmSetLowf64(&df , 0);
+        rtmSetLowf64(&df, 0);
 
-        c = (z - df * df) / (s + df);
-        p = z * (pS0 + z * (pS1 + z * (pS2 + z * (pS3 + z * (pS4 + z * pS5)))));
-        q = RTM_CONSTANT_ONE + z * (qS1 + z * (qS2 + z * (qS3 + z * qS4)));
+        c = (z - (df * df)) / (s + df);
+        p = z * (pS0 + (z * (pS1 + (z * (pS2 + (z * (pS3 + (z * (pS4 + (z * pS5))))))))));
+        q = RTM_CONSTANT_ONE + (z * (qS1 + (z * (qS2 + (z * (qS3 + (z * qS4)))))));
         r = p / q;
-        w = r * s + c;
+        w = (r * s) + c;
 
-        /* return 2asin(sqrt((1-x)/2))   */
+        /* return 2asin(sqrt((1-x)/2)) */
         result = 2.0 * (df + w);
     }
 
